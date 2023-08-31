@@ -16,7 +16,7 @@ public class StartTextState extends State{
     public StartTextState(StateManager stm) {
         super(stm);
         btn = new Texture("start.png");
-        back = new Texture("background.jpg");
+        back = new Texture("s222.jpg");
     }
 
     @Override
@@ -28,7 +28,6 @@ public class StartTextState extends State{
     public void touchHandler() {
         if(Gdx.input.justTouched()){
             Vector3 tmp=new Vector3(Gdx.input.getX(), Gdx.input.getY(),0);
-            //camera.unproject(tmp);
             Rectangle textureBounds=new Rectangle((Gdx.graphics.getWidth() / 2) - 400,
                     (Gdx.graphics.getHeight() / 2) - 210,
                     800, 420);
