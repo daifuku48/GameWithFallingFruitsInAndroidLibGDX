@@ -2,24 +2,36 @@ package com.games.first.danilkharytonovuaaaa.game.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.games.first.danilkharytonovuaaaa.game.model.CatcherBox;
-import com.games.first.danilkharytonovuaaaa.game.model.Food;
+import com.games.first.danilkharytonovuaaaa.game.model.Food1;
+import com.games.first.danilkharytonovuaaaa.game.model.Food2;
+import com.games.first.danilkharytonovuaaaa.game.model.Food3;
+import com.games.first.danilkharytonovuaaaa.game.model.Food5;
 
 public class GameBirdState extends State{
 
     private Texture back;
+
+    private Integer count = 0;
     private boolean isOver;
-    private Food food;
+    private Food1 food;
+    private Food2 food2;
+    private Food3 food3;
+    private Food5 food4;
     private CatcherBox box;
     private StateManager stateManager;
     public GameBirdState(StateManager stm) {
         super(stm);
         stateManager = stm;
         box = new CatcherBox(Gdx.graphics.getPpcX() - 70,100f,0f);
-        food = new Food(Gdx.graphics.getWidth());
+        food = new Food1(Gdx.graphics.getWidth());
+        food2 = new Food2(Gdx.graphics.getWidth());
+        food3 = new Food3(Gdx.graphics.getWidth());
+        food4 = new Food5(Gdx.graphics.getWidth());
         back = new Texture("s222.jpg");
         isOver = false;
     }
@@ -48,10 +60,11 @@ public class GameBirdState extends State{
         // Update food
         food.update(delta);
 
-        // Check collision between box and food
-        if (box.bounds.overlaps(food.bounds)) {
-            // Handle collision, you can increase score, remove the food, etc.
-        }
+        food2.update(delta);
+
+        food3.update(delta);
+
+        food4.update(delta);
 
         this.camera.update();
     }
@@ -66,16 +79,58 @@ public class GameBirdState extends State{
                 Gdx.graphics.getHeight()
         );
 
-        if (isCollision()){
-            food = new Food(Gdx.graphics.getWidth());
+        BitmapFont font = new BitmapFont(); // You can adjust font settings as needed
+        font.getData().setScale(7f);
+        // Draw the score text
+        font.draw(batch, "Score: " + count.toString(), 100, Gdx.graphics.getHeight() - 100);
+
+        if (isCollisionFood1()){
+            count = count + 1;
+            food = new Food1(Gdx.graphics.getWidth());
         }
+
+        if (isCollisionFood2()){
+            count = count + 1;
+            food2 = new Food2(Gdx.graphics.getWidth());
+        }
+
+        if (isCollisionFood3()){
+            count = count + 1;
+            food3 = new Food3(Gdx.graphics.getWidth());
+        }
+
+        if (isCollisionFood5()){
+            count = count + 1;
+            food4 = new Food5(Gdx.graphics.getWidth());
+        }
+
 
         if (food.isOver){
            stateManager.push(new EndTextState(stateManager));
         }
 
+        if (food2.isOver){
+            stateManager.push(new EndTextState(stateManager));
+        }
+        if (food3.isOver){
+            stateManager.push(new EndTextState(stateManager));
+        }
+        if (food4.isOver){
+            stateManager.push(new EndTextState(stateManager));
+        }
+
+
         // Render food
         batch.draw(food.getTexture(), food.getPosition().x, food.getPosition().y,
+                200, 200);
+
+        batch.draw(food2.getTexture(), food2.getPosition().x, food2.getPosition().y,
+                200, 200);
+
+        batch.draw(food3.getTexture(), food3.getPosition().x, food3.getPosition().y,
+                200, 200);
+
+        batch.draw(food4.getTexture(), food4.getPosition().x, food4.getPosition().y,
                 200, 200);
 
         //Render box
@@ -84,9 +139,22 @@ public class GameBirdState extends State{
         batch.end();
     }
 
-    private boolean isCollision(){
+    private boolean isCollisionFood1(){
         return box.collidesWithItem(food.bounds);
     }
+
+    private boolean isCollisionFood2(){
+        return box.collidesWithItem(food2.bounds);
+    }
+
+    private boolean isCollisionFood3(){
+        return box.collidesWithItem(food3.bounds);
+    }
+
+    private boolean isCollisionFood5(){
+        return box.collidesWithItem(food4.bounds);
+    }
+
 
     @Override
     public void dispose() {
